@@ -1,0 +1,19 @@
+// The below file is only for testing on local environment...
+// How to set up environment -- Please refer in root for the documentation
+package wordcount
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+
+object wc {
+  def main(args: Array[String]) {
+    val conf = new SparkConf().setAppName("testing").setMaster("local")
+    val sc = new SparkContext(conf)
+    val textRDD = sc.textFile("D:/scala-learning-projects/sparkapi/WordCountfile.txt")
+   
+    val wrdcntRDD = textRDD.flatMap(_.split(" "))
+    val wordTuple = wrdcntRDD.map(rec => (rec , 1))
+    wordTuple.collect().foreach(println)
+    val wcRDD = wordTuple.reduceByKey((total,value) => total + value) 
+    
+  }
+}
